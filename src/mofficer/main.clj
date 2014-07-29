@@ -6,6 +6,8 @@
             [ring.adapter.jetty :as jetty]
             [compojure.handler :as handler]
             [compojure.route :as route]
+            [clj-http.client :as http-client]
+            [cheshire.core :as ches]
             [mofficer.persistence.user-config-dao :as user-config-dao]
             [mofficer.service.user-config-resource :as user-config-resource]))
 
@@ -14,6 +16,32 @@
    "Access-Control-Allow-Methods" "OPTIONS,HEAD,GET,POST,PUT,DELETE"
    "Access-Control-Allow-Origin" "*"})
 
+(def autheo-url "http://localhost:9002/autheo/api/auth")
+
+(defn get-autheo-ticket-from-request [request]
+  (let [auth-token (:Authorization (:headers request))
+        http-verb (name (:request-method request))]
+    {:tokenValue auth-token :httpVerb http-verb :requestedUrl (:uri request)}))
+
+(defn get-put-request-with-body-as-json [body]
+  (http-client/put autheo-url {:socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
+                               :content-type :json :accept :json
+                               :body (ches/generate-string body)
+                               :throw-exceptions false}))
+
+(defn get-autheo-authorization-response-http-status-code [autheo-ticket]
+  (let [autheo-http-reponse (get-put-request-with-body-as-json autheo-ticket)]
+    (:status autheo-http-reponse)))
+
+(defn authorize-request-filter [app request]
+  (let [autheo-ticket (get-autheo-ticket-from-request request)
+        http-status-code (get-autheo-authorization-response-http-status-code autheo-ticket)]
+    (if-not (= http-status-code 200)
+      {:status http-status-code :headers response-headers-with-cors}
+      (app request))))
+
+(defn authorize-request-middleware [app]
+  (fn [request] (authorize-request-filter app request)))
 (defn http-options-filter [app request]
   (let [http-verb (name (:request-method request))]
     (if (.equalsIgnoreCase http-verb "OPTIONS") 
