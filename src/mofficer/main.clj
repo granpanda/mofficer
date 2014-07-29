@@ -44,7 +44,7 @@
         :access-control-allow-headers ["Content-Type, Accept, Authorization"]
         :access-control-allow-methods ["OPTIONS, HEAD, GET, POST, PUT, DELETE"])
       (wrap-json-body {:keywords? true})
-      (wrap-json-response)
+      (wrap-json-response {:pretty true})
       (http-options-filter-middleware)
       (simple-loggin-middleware)))
 
