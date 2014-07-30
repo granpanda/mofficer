@@ -5,9 +5,9 @@
 
 (defroutes user-config-api
   (context "/user-configs" []
-           (POST "/" { body :body } 
-                 (let [either-answer (user-config-business/create-user-config body)]
+           (POST "/" { user-config :body } 
+                 (let [either-answer (user-config-business/create-user-config user-config)]
                    (if (:successAnswer either-answer) 
-                     {:status 201 :body (:successAnswer either-answer)} 
-                     {:status 500 :body (:errorMessage either-answer)})))
-           (GET "/:sender-username" [sender-username] (ring-resp/response (user-config-business/get-user-config sender-username)))))
+                     { :status 201 :body (:successAnswer either-answer) } 
+                     { :status 500 :body (:errorMessage either-answer) })))
+           (GET "/:sender-username" [sender-username] (ring-resp/response (user-config-business/get-user-config-by-username sender-username)))))

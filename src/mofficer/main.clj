@@ -24,10 +24,10 @@
     {:tokenValue auth-token :httpVerb http-verb :requestedUrl (:uri request)}))
 
 (defn get-put-request-with-body-as-json [body]
-  (http-client/put autheo-url {:socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
-                               :content-type :json :accept :json
-                               :body (ches/generate-string body)
-                               :throw-exceptions false}))
+  (http-client/put autheo-url { :socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
+                                :content-type :json :accept :json
+                                :body (ches/generate-string body)
+                                :throw-exceptions false }))
 
 (defn get-autheo-authorization-response-http-status-code [autheo-ticket]
   (let [autheo-http-reponse (get-put-request-with-body-as-json autheo-ticket)]

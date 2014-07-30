@@ -22,6 +22,10 @@
 
 (defn- get-same-identifier [string] string)
 
-(defn get-user-config [sender-username] 
+(defn get-user-config-by-username [sender-username] 
   (let [select-sql (str "SELECT * FROM " user-config-table-name " WHERE senderUsername = ?;")]
     (jdbc-clj/query mysql-db [select-sql sender-username] :identifiers get-same-identifier)))
+
+(defn get-user-config-by-email [sender-email] 
+  (let [select-sql (str "SELECT * FROM " user-config-table-name " WHERE senderEmail = ?;")]
+    (jdbc-clj/query mysql-db [select-sql sender-email] :identifiers get-same-identifier)))
