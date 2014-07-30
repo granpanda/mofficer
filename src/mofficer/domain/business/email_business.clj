@@ -1,20 +1,8 @@
 (ns mofficer.domain.business.email-business
-  (:require [langohr.core :as rmq]
-            [langohr.channel :as lch]
-            [langohr.queue :as lq]
-            [langohr.consumers :as lc]
-            [langohr.basic :as lb]
-            [cheshire.core :as ches]))
+  (:require [mofficer.infrastructure.mq.rabbit-handler :as rabbit-handler]))
 
-(def default-exchange-name "")
 (def email-queue-name "mofficer_email-queue")
 
-(defn queue-email-request [user-config email-info]
-  (let [connection (rmq/connect)
-        channel (lch/open connection)
-        message (ches/generate-string {:user-config user-config :email-info email-info})]
-    (lq/declare channel email-queue-name :exclusive false :auto-delete false)
-    (lb/publish channel default-exchange-name email-queue-name message)
-    (rmq/close channel)
-    (rmq/close connection))
-  "The message has been sent.")
+(def add-message-to-email-queue [user-config email-info]
+  (let [message-as-clojure-map {:user-config user-config :email-info email-info}]
+    (rabbit-handler/add-message-to-queue email-queue-name message-as-clojure-map)))

@@ -6,7 +6,7 @@
             [ring.adapter.jetty :as jetty]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [clj-http.client :as http-client]
+            [clj-http.client :as clj-http]
             [cheshire.core :as ches]
             [mofficer.persistence.user-config-dao :as user-config-dao]
             [mofficer.domain.workers.email-worker :as email-worker]
@@ -18,18 +18,19 @@
    "Access-Control-Allow-Methods" "OPTIONS,HEAD,GET,POST,PUT,DELETE"
    "Access-Control-Allow-Origin" "*"})
 
-(def autheo-url "http://localhost:9002/autheo/api/auth")
+(def autheo-url "http://localhost:9002/api/auth")
 
 (defn get-autheo-ticket-from-request [request]
-  (let [auth-token (:Authorization (:headers request))
+  (let [headers-map (ches/parse-string (ches/generate-string (:headers request)) true)
+        auth-token (:authorization headers-map)
         http-verb (name (:request-method request))]
     {:tokenValue auth-token :httpVerb http-verb :requestedUrl (:uri request)}))
 
 (defn get-put-request-with-body-as-json [body]
-  (http-client/put autheo-url { :socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
-                                :content-type :json :accept :json
-                                :body (ches/generate-string body)
-                                :throw-exceptions false }))
+  (clj-http/put autheo-url {:socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
+                            :content-type :json :accept :json
+                            :body (ches/generate-string body)
+                            :throw-exceptions false}))
 
 (defn get-autheo-authorization-response-http-status-code [autheo-ticket]
   (let [autheo-http-reponse (get-put-request-with-body-as-json autheo-ticket)]
@@ -44,10 +45,11 @@
 
 (defn authorize-request-middleware [app]
   (fn [request] (authorize-request-filter app request)))
+
 (defn http-options-filter [app request]
   (let [http-verb (name (:request-method request))]
     (if (.equalsIgnoreCase http-verb "OPTIONS") 
-      { :status 204 :headers response-headers-with-cors } 
+      {:status 204 :headers response-headers-with-cors} 
       (app request))))
 
 (defn http-options-filter-middleware [app]
@@ -77,11 +79,12 @@
         :access-control-allow-methods ["OPTIONS, HEAD, GET, POST, PUT, DELETE"])
       (wrap-json-body {:keywords? true})
       (wrap-json-response {:pretty true})
+      (authorize-request-middleware)
       (http-options-filter-middleware)
       (simple-loggin-middleware)))
 
 (defn start-server [] 
-  (jetty/run-jetty app { :port 9022 :join? false }))
+  (jetty/run-jetty app {:port 9022 :join? false}))
 
 (defn -main [& args] 
   (set-up-application)

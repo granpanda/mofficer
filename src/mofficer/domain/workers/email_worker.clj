@@ -33,10 +33,10 @@
 
 (defn initialize-email-workers [number-of-workers queue-name handling-message-function]
   (if (> number-of-workers 0)
-    (let [connection (rmq/connect)
+    (let [connection (rmq/connect {:automatically-recover true})
           channel (lch/open connection)]
       (lb/qos channel 1)
-      (lq/declare channel queue-name :exclusive false :auto-delete false)
+      (lq/declare channel queue-name :durable true :exclusive false :auto-delete false)
       (lc/subscribe channel queue-name handling-message-function :auto-ack false)
       (println "Initialize email-worker #" number-of-workers)
       (initialize-email-workers (- number-of-workers 1) queue-name handling-message-function))))
