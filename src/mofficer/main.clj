@@ -11,12 +11,13 @@
             [mofficer.infrastructure.middlewares.authorization-middleware :as authorization-mid]
             [mofficer.persistence.user-config-dao :as user-config-dao]
             [mofficer.domain.workers.email-worker :as email-worker]
+            [mofficer.infrastructure.mq.rabbit-handler :as rabbit-handler]
             [mofficer.service.email-resource :as email-resource]
             [mofficer.service.user-config-resource :as user-config-resource]))
 
 (defn set-up-application [] 
   (user-config-dao/create-user-configs-table-if-not-exists)
-  (email-worker/initialize-email-workers email-worker/number-of-workers email-worker/email-queue-name email-worker/send-message-from-queue-by-email))
+  (rabbit-handler/initialize-workers email-worker/number-of-workers email-worker/email-queue-name email-worker/send-message-from-queue-by-email))
 
 (defroutes api-routes
   (context "/mofficer/api" [] user-config-resource/user-config-api email-resource/email-api)

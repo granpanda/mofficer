@@ -38,3 +38,16 @@
     (if-not (and (nil? connection) (nil? channel))
       (publish-message-to-queue connection channel queue-name message-as-json)
       (Either. (str "Connection error: " (:errorMessage connection-either) ", Channel error: " (:errorMessage channel-either)) nil))))
+
+(defn initialize-workers [number-of-workers queue-name handling-message-function]
+  (if (> number-of-workers 0)
+    (let [connection-either (get-rabbit-connection)
+          connection (:successAnswer connection-either)
+          channel-either (get-rabbit-channel connection)
+          channel (:successAnswer channel-either)]
+      (if-not (and (nil? connection) (nil? channel))
+        (do (lb/qos channel 1)
+            (lq/declare channel queue-name :durable true :exclusive false :auto-delete false)
+            (lc/subscribe channel queue-name handling-message-function :auto-ack false)
+            (println "Initialize email-worker #" number-of-workers)
+            (initialize-workers (- number-of-workers 1) queue-name handling-message-function))))))
