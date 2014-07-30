@@ -6,62 +6,13 @@
             [ring.adapter.jetty :as jetty]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [clj-http.client :as clj-http]
-            [cheshire.core :as ches]
+            [mofficer.infrastructure.middlewares.logging-middleware :as logging-mid]
+            [mofficer.infrastructure.middlewares.http-options-middleware :as http-options-mid]
+            [mofficer.infrastructure.middlewares.authorization-middleware :as authorization-mid]
             [mofficer.persistence.user-config-dao :as user-config-dao]
             [mofficer.domain.workers.email-worker :as email-worker]
             [mofficer.service.email-resource :as email-resource]
             [mofficer.service.user-config-resource :as user-config-resource]))
-
-(def response-headers-with-cors 
-  {"Access-Control-Allow-Headers" "X-Requested-With,Content-Type,Accept,Origin,Authorization"
-   "Access-Control-Allow-Methods" "OPTIONS,HEAD,GET,POST,PUT,DELETE"
-   "Access-Control-Allow-Origin" "*"})
-
-(def autheo-url "http://localhost:9002/api/auth")
-
-(defn get-autheo-ticket-from-request [request]
-  (let [headers-map (ches/parse-string (ches/generate-string (:headers request)) true)
-        auth-token (:authorization headers-map)
-        http-verb (name (:request-method request))]
-    {:tokenValue auth-token :httpVerb http-verb :requestedUrl (:uri request)}))
-
-(defn get-put-request-with-body-as-json [body]
-  (clj-http/put autheo-url {:socket-timeout 1000 :conn-timeout 1000 ; In milliseconds
-                            :content-type :json :accept :json
-                            :body (ches/generate-string body)
-                            :throw-exceptions false}))
-
-(defn get-autheo-authorization-response-http-status-code [autheo-ticket]
-  (let [autheo-http-reponse (get-put-request-with-body-as-json autheo-ticket)]
-    (:status autheo-http-reponse)))
-
-(defn authorize-request-filter [app request]
-  (let [autheo-ticket (get-autheo-ticket-from-request request)
-        http-status-code (get-autheo-authorization-response-http-status-code autheo-ticket)]
-    (if-not (= http-status-code 200)
-      {:status http-status-code :headers response-headers-with-cors}
-      (app request))))
-
-(defn authorize-request-middleware [app]
-  (fn [request] (authorize-request-filter app request)))
-
-(defn http-options-filter [app request]
-  (let [http-verb (name (:request-method request))]
-    (if (.equalsIgnoreCase http-verb "OPTIONS") 
-      {:status 204 :headers response-headers-with-cors} 
-      (app request))))
-
-(defn http-options-filter-middleware [app]
-  (fn [request] (http-options-filter app request)))
-
-(defn log-request [app request]
-  (let [http-verb (name (:request-method request)) uri (:uri request)]
-    (println "http-verb:" http-verb "-> uri:" uri)
-    (app request)))
-
-(defn simple-loggin-middleware [app]
-  (fn [request] (log-request app request)))
 
 (defn set-up-application [] 
   (user-config-dao/create-user-configs-table-if-not-exists)
@@ -79,9 +30,9 @@
         :access-control-allow-methods ["OPTIONS, HEAD, GET, POST, PUT, DELETE"])
       (wrap-json-body {:keywords? true})
       (wrap-json-response {:pretty true})
-      (authorize-request-middleware)
-      (http-options-filter-middleware)
-      (simple-loggin-middleware)))
+      (authorization-mid/authorize-request-middleware)
+      (http-options-mid/http-options-filter-middleware)
+      (logging-mid/simple-loggin-middleware)))
 
 (defn start-server [] 
   (jetty/run-jetty app {:port 9022 :join? false}))
