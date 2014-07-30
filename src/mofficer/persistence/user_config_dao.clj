@@ -12,7 +12,7 @@
 
 (defn create-user-configs-table-if-not-exists []
   (let [create-table-if-not-exists-sql (str "CREATE TABLE IF NOT EXISTS " user-config-table-name " (emailHost VARCHAR(256), emailPort INT, senderUsername VARCHAR(256) PRIMARY KEY," 
-                                            " senderPassword VARCHAR(256), senderEmail VARCHAR(256));")]
+                                            " senderPassword VARCHAR(256), senderEmail VARCHAR(256), senderId VARCHAR(128));")]
     (jdbc-clj/db-do-commands mysql-db create-table-if-not-exists-sql)))
 
 (defn create-user-config [user-config]
@@ -29,3 +29,7 @@
 (defn get-user-config-by-email [sender-email] 
   (let [select-sql (str "SELECT * FROM " user-config-table-name " WHERE senderEmail = ?;")]
     (jdbc-clj/query mysql-db [select-sql sender-email] :identifiers get-same-identifier)))
+
+(defn get-user-config-by-id [sender-id] 
+  (let [select-sql (str "SELECT * FROM " user-config-table-name " WHERE senderId = ?;")]
+    (jdbc-clj/query mysql-db [select-sql sender-id] :identifiers get-same-identifier)))
