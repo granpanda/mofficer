@@ -9,6 +9,6 @@
     (email-business/queue-email-request user-config email-info)))
 
 (defroutes email-api
-  (context "/emails/:user-id" [user-id]
-           (POST "/" { email-info :body } ((queue-email-request email-info)
-                                           { :status 202 }))))
+  (context "/emails" []
+           (POST "/" { email-info :body } {:status 202
+                                           :body (queue-email-request email-info)})))

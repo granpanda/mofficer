@@ -9,6 +9,8 @@
             [clj-http.client :as http-client]
             [cheshire.core :as ches]
             [mofficer.persistence.user-config-dao :as user-config-dao]
+            [mofficer.domain.workers.email-worker :as email-worker]
+            [mofficer.service.email-resource :as email-resource]
             [mofficer.service.user-config-resource :as user-config-resource]))
 
 (def response-headers-with-cors 
@@ -59,10 +61,12 @@
 (defn simple-loggin-middleware [app]
   (fn [request] (log-request app request)))
 
-(defn set-up-application [] (user-config-dao/create-user-configs-table-if-not-exists))
+(defn set-up-application [] 
+  (user-config-dao/create-user-configs-table-if-not-exists)
+  (email-worker/initialize-email-workers email-worker/number-of-workers email-worker/email-queue-name email-worker/send-message-from-queue-by-email))
 
 (defroutes api-routes
-  (context "/mofficer/api" [] user-config-resource/user-config-api)
+  (context "/mofficer/api" [] user-config-resource/user-config-api email-resource/email-api)
   (route/not-found "Not Found"))
 
 (def app 

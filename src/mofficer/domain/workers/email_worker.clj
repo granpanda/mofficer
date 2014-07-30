@@ -9,6 +9,7 @@
 
 (def utf-8 "UTF-8")
 (def number-of-workers 10)
+(def email-queue-name "mofficer_email-queue")
 
 (defn send-email [user-config email-info] 
   (println "Sending email to: " (:recipients email-info) " with subject: " (:subject email-info) " and message: " (:body email-info))
@@ -30,11 +31,12 @@
     (if (send-email user-config email-info)
       (lb/ack channel (:delivery-tag metadata)))))
 
-(defn handle-queue-messages [number-of-workers queue-name handling-message-function]
+(defn initialize-email-workers [number-of-workers queue-name handling-message-function]
   (if (> number-of-workers 0)
     (let [connection (rmq/connect)
           channel (lch/open connection)]
       (lb/qos channel 1)
       (lq/declare channel queue-name :exclusive false :auto-delete false)
       (lc/subscribe channel queue-name handling-message-function :auto-ack false)
-      (handle-queue-messages (- number-of-workers 1) queue-name handling-message-function))))
+      (println "Initialize email-worker #" number-of-workers)
+      (initialize-email-workers (- number-of-workers 1) queue-name handling-message-function))))

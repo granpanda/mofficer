@@ -16,4 +16,5 @@
     (lq/declare channel email-queue-name :exclusive false :auto-delete false)
     (lb/publish channel default-exchange-name email-queue-name message)
     (rmq/close channel)
-    (rmq/close connection)))
+    (rmq/close connection))
+  "The message has been sent.")
