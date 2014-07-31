@@ -4,6 +4,8 @@
 /lib
 /classes
 /checkouts
+/jdbc*
+
 pom.xml
 *.jar
 *.class

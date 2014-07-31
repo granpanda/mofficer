@@ -6,6 +6,7 @@
                  [ring/ring-json "0.3.1"]
                  [ring-cors "0.1.0"]
                  [compojure "1.1.8"]
+                 [cheshire "5.3.1"]
                  [clj-http "0.9.0"]
                  [clj-time "0.6.0"]
                  [com.novemberain/langohr "2.9.0"]
@@ -18,8 +19,9 @@
          :auto-reload true
          :auto-refresh? true}
   :profiles
-  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+  {:dev {:plugins [[lein-midje "3.1.3"]]
+         :dependencies [[javax.servlet/servlet-api "2.5"]
+                        [com.h2database/h2 "1.4.180"]
                         [ring-mock "0.1.5"]
-                        [midje "1.6.2"]
-                        [cheshire "5.2.0"]]}}
+                        [midje "1.6.3"]]}}
   :main mofficer.main)

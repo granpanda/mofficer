@@ -16,7 +16,7 @@
             [mofficer.service.user-config-resource :as user-config-resource]))
 
 (defn set-up-application [] 
-  (user-config-dao/create-user-configs-table-if-not-exists)
+  (user-config-dao/create-user-configs-table-if-not-exists user-config-dao/mysql-db)
   (rabbit-handler/initialize-workers email-worker/number-of-workers email-worker/email-queue-name email-worker/send-message-from-queue-by-email))
 
 (defroutes api-routes

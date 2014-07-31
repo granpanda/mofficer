@@ -4,16 +4,14 @@
             [mofficer.infrastructure.datastructures.either])
   (:import [mofficer.infrastructure.datastructures.either Either]))
 
-(defn create-either [errorMessage successAnswer] (Either. errorMessage successAnswer))
-
 (defn create-user-config [user-config]
-  (let [errorMessage (user-config-dao/create-user-config user-config)]
-    (if (nil? errorMessage) 
-      (create-either errorMessage user-config) 
-      (create-either "The username is already into the DB." nil))))
+  (let [insert-result (user-config-dao/create-user-config user-config-dao/mysql-db user-config)]
+    (if (true? insert-result) 
+      (Either. nil user-config) 
+      (Either. "The username is already into the DB." nil))))
 
 (defn get-user-config-by-username [sender-username]
-  (first (user-config-dao/get-user-config-by-username sender-username)))
+  (first (user-config-dao/get-user-config-by-username user-config-dao/mysql-db sender-username)))
 
 (defn get-user-config-by-email [sender-email]
-  (first (user-config-dao/get-user-config-by-email sender-email)))
+  (first (user-config-dao/get-user-config-by-email user-config-dao/mysql-db sender-email)))
