@@ -15,7 +15,7 @@
 
 (defroutes email-api
   (context "/emails/:sender-id" [sender-id]
-           (POST "/" { email-info :body } (let [queue-email-response (queue-email-request sender-id email-info)]
-                                            (if-not (nil? (:successAnswer queue-email-response))
-                                              {:status 202 :body (:successAnswer queue-email-response)}
-                                              {:status 500 :body (:errorMessage queue-email-response)})))))
+           (POST "/" { email-info :body } (let [queue-email-either (queue-email-request sender-id email-info)]
+                                            (if-not (nil? (:successAnswer queue-email-either))
+                                              {:status 202 :body (:successAnswer queue-email-either)}
+                                              {:status 500 :body (:errorMessage queue-email-either)})))))
