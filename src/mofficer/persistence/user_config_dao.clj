@@ -4,7 +4,7 @@
   (:import [mofficer.infrastructure.datastructures.either Either]))
 
 (def mysql-db {:subprotocol "mysql"
-               :subname "http://localhost:3306/mofficerdb"
+               :subname "//localhost:3306/mofficerdb"
                :user "mofficer"
                :password "mofficer1234"})
 
