@@ -11,7 +11,7 @@
       (Either. "The username is already into the DB." nil))))
 
 (defn get-user-config-by-username [sender-username]
-  (first (user-config-dao/get-user-config-by-username user-config-dao/mysql-db sender-username)))
+  (user-config-dao/get-user-config-by-username user-config-dao/mysql-db sender-username))
 
 (defn get-user-config-by-email [sender-email]
-  (first (user-config-dao/get-user-config-by-email user-config-dao/mysql-db sender-email)))
+  (user-config-dao/get-user-config-by-email user-config-dao/mysql-db sender-email))

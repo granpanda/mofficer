@@ -24,7 +24,7 @@
 (background (before :facts (user-config-dao/create-user-configs-table-if-not-exists h2-db))
             (after :facts (drop-db h2-db)))
 
-(facts "About the user-config-dao"
+(facts "About the user-config-dao:"
 
        (fact "create-user-config creates a new user config into the database."
              (user-config-dao/count-table-rows h2-db) => 0
