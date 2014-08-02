@@ -3,7 +3,8 @@
   (:require [ring.util.response :as ring-resp]
             [mofficer.infrastructure.datastructures.either]
             [mofficer.domain.business.email-business :as email-business]
-            [mofficer.domain.business.user-config-business :as user-config-business])
+            [mofficer.domain.business.user-config-business :as user-config-business]
+            [mofficer.infrastructure.translators.email-info-translator :as email-info-translator])
   (:import [mofficer.infrastructure.datastructures.either Either]))
 
 (defn- queue-email-request [sender-id email-info]
@@ -15,7 +16,8 @@
 
 (defroutes email-api
   (context "/emails/:sender-id" [sender-id]
-           (POST "/" { email-info :body } (let [queue-email-either (queue-email-request sender-id email-info)]
+           (POST "/" { email-info-map :body } (let [email-info (email-info-translator/get-email-info-from-map email-info-map)
+                                                    queue-email-either (queue-email-request sender-id email-info-map)]
                                             (if-not (nil? (:successAnswer queue-email-either))
                                               {:status 202 :body (:successAnswer queue-email-either)}
                                               {:status 500 :body (:errorMessage queue-email-either)})))))
