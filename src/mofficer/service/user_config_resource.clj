@@ -1,12 +1,14 @@
 (ns mofficer.service.user-config-resource
   (:use [compojure.core])
   (:require [ring.util.response :as ring-resp]
-            [mofficer.domain.business.user-config-business :as user-config-business]))
+            [mofficer.domain.business.user-config-business :as user-config-business]
+            [mofficer.infrastructure.translators.user-config-translator :as user-config-translator]))
 
 (defroutes user-config-api
   (context "/user-configs" []
-           (POST "/" { user-config :body } 
-                 (let [either-answer (user-config-business/create-user-config user-config)]
+           (POST "/" { user-config-map :body } 
+                 (let [user-config-record (user-config-translator/get-user-config-record-from-map user-config-map)
+                       either-answer (user-config-business/create-user-config user-config-record)]
                    (if (:successAnswer either-answer) 
                      { :status 201 :body (:successAnswer either-answer) } 
                      { :status 500 :body (:errorMessage either-answer) })))
