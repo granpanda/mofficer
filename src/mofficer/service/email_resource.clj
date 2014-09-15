@@ -14,10 +14,13 @@
       (email-business/add-message-to-email-queue user-config email-info)
       (Either. "The user who is calling the service and the email owner are not the same" nil))))
 
+(defn send-email [sender-id email-info-map]
+  (let [email-info (email-info-translator/get-email-info-from-map email-info-map)
+        queue-email-either (queue-email-request sender-id email-info-map)]
+    (if-not (nil? (:successAnswer queue-email-either))
+      {:status 202 :body (:successAnswer queue-email-either)}
+      {:status 500 :body (:errorMessage queue-email-either)})))
+
 (defroutes email-api
   (context "/emails/:sender-id" [sender-id]
-           (POST "/" { email-info-map :body } (let [email-info (email-info-translator/get-email-info-from-map email-info-map)
-                                                    queue-email-either (queue-email-request sender-id email-info-map)]
-                                            (if-not (nil? (:successAnswer queue-email-either))
-                                              {:status 202 :body (:successAnswer queue-email-either)}
-                                              {:status 500 :body (:errorMessage queue-email-either)})))))
+           (POST "/" { email-info-map :body } (send-email sender-id email-info-map))))
