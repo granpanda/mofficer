@@ -5,18 +5,15 @@
 
 (def utf-8 "UTF-8")
 
-(defn get-message [user-config email-info] {:host (:emailHost user-config), :port (:emailPort user-config), :user (:senderUsername user-config), :pass (:senderPassword user-config)}
-                                           {:from (:senderEmail email-info), :to (:recipients email-info), :subject (:subject email-info), :body (:body email-info)})
-
-(defn send-email-result [user-config email-info] 
-  (let [postal-answer (postal/send-message (get-message user-config email-info))]
+(defn- send-email-result [user-config email-info] 
+  (let [postal-answer (postal/send-message {:host (:emailHost user-config), :port (:emailPort user-config), :user (:senderUsername user-config), :pass (:senderPassword user-config)}
+                                           {:from (:senderEmail email-info), :to (:recipients email-info), :subject (:subject email-info), :body (:body email-info)})]
     (if (= 0 (:code postal-answer)) true false)))
 
-
-(defn send-email [user-config email-info] 
+(defn send-email [sender-id email-info] 
   (println "Sending email to: " (:recipients email-info) " with subject: " (:subject email-info) " and message: " (:body email-info))
-  (let [send-email (:senderEmail email-info)
+  (let [sender-email (:senderEmail email-info)
         user-config (user-config-business/get-user-config-by-email sender-email)]
     (if (= sender-id (:senderId user-config))
-      send-email-result
+      (send-email-result user-config email-info)
       false)))

@@ -9,7 +9,6 @@
                  [cheshire "5.3.1"]
                  [clj-http "0.9.0"]
                  [clj-time "0.6.0"]
-                 [com.novemberain/langohr "2.9.0"]
                  [com.draines/postal "1.11.1"]
                  [mysql/mysql-connector-java "5.1.25"]
                  [org.clojure/java.jdbc "0.3.4"]]

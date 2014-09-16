@@ -9,10 +9,10 @@
 (defn send-email [sender-id email-info-map]
   (let [email-info (email-info-translator/get-email-info-from-map email-info-map)]
     (if-not (nil? (:senderEmail email-info))
-      (do (future (email-business/send-email sender-id email-info))
+      (do (email-business/send-email sender-id email-info)
           {:status 202})
       {:status 500})))
 
 (defroutes email-api
   (context "/emails/:sender-id" [sender-id]
-           (POST "/" { email-info-map :body } (send-email sender-id email-info-map))))
+           (POST "/" {email-info-map :body} (send-email sender-id email-info-map))))
