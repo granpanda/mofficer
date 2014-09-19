@@ -1,7 +1,5 @@
 (ns mofficer.persistence.user-config-dao
-  (:require [clojure.java.jdbc :as jdbc-clj]
-            [mofficer.infrastructure.datastructures.either])
-  (:import [mofficer.infrastructure.datastructures.either Either]))
+  (:require [clojure.java.jdbc :as jdbc-clj]))
 
 (def mysql-db {:subprotocol "mysql"
                :subname "//localhost:3306/mofficerdb"

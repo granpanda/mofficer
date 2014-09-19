@@ -27,7 +27,7 @@
         :access-control-allow-methods ["OPTIONS, HEAD, GET, POST, PUT, DELETE"])
       (wrap-json-body {:keywords? true})
       (wrap-json-response {:pretty true})
-      (authorization-mid/authorize-request-middleware)
+      ;(authorization-mid/authorize-request-middleware)
       (http-options-mid/http-options-filter-middleware)
       (logging-mid/simple-loggin-middleware)))
 
