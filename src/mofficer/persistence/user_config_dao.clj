@@ -7,8 +7,7 @@
                :password "mofficer1234"})
 
 (def user-config-table-name "user_configs")
-(def create-table-if-not-exists-sql (str "CREATE TABLE IF NOT EXISTS " user-config-table-name " (emailHost VARCHAR(256), emailPort INT, senderUsername VARCHAR(256) PRIMARY KEY," 
-                                            " senderPassword VARCHAR(256), senderEmail VARCHAR(256), senderId VARCHAR(128));"))
+(def create-table-if-not-exists-sql (str "CREATE TABLE IF NOT EXISTS " user-config-table-name " (emailHost VARCHAR(128), emailPort INT, senderUsername VARCHAR(128) PRIMARY KEY, senderPassword VARCHAR(128), senderEmail VARCHAR(128), senderId VARCHAR(128));"))
 
 (defn create-user-configs-table-if-not-exists [db] (jdbc-clj/db-do-commands db create-table-if-not-exists-sql))
 
