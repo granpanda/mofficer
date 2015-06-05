@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 (2015-06-05)
+
+* Get UserConfig by senderId instead of senderUsername.
+
 ## 0.1.2 (2015-06-05)
 
 * Bug fix: create user configs table if not exists.

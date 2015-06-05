@@ -43,8 +43,8 @@
              (user-config-dao/count-table-rows h2-db) => 1
              (user-config-dao/get-user-config-by-email h2-db "sender@domain.com") => user-config-test)
        
-       (fact "get-user-config-by-id returns the user-config with the given ID."
+       (fact "get-user-config-by-sender-id returns the user-config with the given ID."
              (user-config-dao/count-table-rows h2-db) => 0
              (user-config-dao/create-user-config h2-db user-config-test) => true
              (user-config-dao/count-table-rows h2-db) => 1
-             (user-config-dao/get-user-config-by-id h2-db "senderId") => user-config-test))
+             (user-config-dao/get-user-config-by-sender-id h2-db "senderId") => user-config-test))

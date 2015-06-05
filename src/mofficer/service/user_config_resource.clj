@@ -14,4 +14,4 @@
 (defroutes user-config-api
   (context "/user-configs" []
            (POST "/" { user-config-map :body } (create-user-config user-config-map))
-           (GET "/:sender-username" [sender-username] (ring-resp/response (user-config-business/get-user-config-by-username sender-username)))))
+           (GET "/:sender-id" [sender-id] (ring-resp/response (user-config-business/get-user-config-by-sender-id sender-id)))))
