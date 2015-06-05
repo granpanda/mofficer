@@ -10,8 +10,8 @@
       (Either. nil user-config) 
       (Either. "The username is already into the DB." nil))))
 
-(defn get-user-config-by-id [sender-id]
-  (user-config-dao/get-user-config-by-id user-config-dao/mysql-db sender-id))
+(defn get-user-config-by-sender-id [sender-id]
+  (user-config-dao/get-user-config-by-sender-id user-config-dao/mysql-db sender-id))
 
 (defn get-user-config-by-username [sender-username]
   (user-config-dao/get-user-config-by-username user-config-dao/mysql-db sender-username))

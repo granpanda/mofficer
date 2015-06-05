@@ -25,7 +25,7 @@
 (defn send-email [sender-id email-info] 
   (println "Sending email to: " (:recipients email-info) " with subject: " (:subject email-info) " and message: " (:body email-info))
   (let [sender-email (:senderEmail email-info)
-        user-config (user-config-business/get-user-config-by-id sender-id)]
+        user-config (user-config-business/get-user-config-by-sender-id sender-id)]
     (if (or (nil? sender-email) (nil? user-config))
       (Either. (str "The sender mail or the user config from the user with ID: " sender-id " does not exist.") nil)
       (send-email-and-get-either-result user-config email-info))))

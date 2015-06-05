@@ -34,7 +34,7 @@
         query-result (jdbc-clj/query db [select-sql sender-email] :identifiers get-same-identifier)]
     (first query-result)))
 
-(defn get-user-config-by-id [db sender-id] 
+(defn get-user-config-by-sender-id [db sender-id] 
   (let [select-sql (str "SELECT * FROM " user-config-table-name " WHERE senderId = ?;")
         query-result (jdbc-clj/query db [select-sql sender-id] :identifiers get-same-identifier)]
     (first query-result)))

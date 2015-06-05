@@ -22,9 +22,9 @@
              (user-config-business/create-user-config user-config-for-tests) => (Either. "The username is already into the DB." nil)
              (provided (user-config-dao/create-user-config anything user-config-for-tests) => false))
 
-       (fact "The get-user-config-by-id function returns the matching user config."
-             (user-config-business/get-user-config-by-id "senderId") => user-config-for-tests
-             (provided (user-config-dao/get-user-config-by-id anything "senderId") => user-config-for-tests))
+       (fact "The get-user-config-by-sender-id function returns the matching user config."
+             (user-config-business/get-user-config-by-sender-id "senderId") => user-config-for-tests
+             (provided (user-config-dao/get-user-config-by-sender-id anything "senderId") => user-config-for-tests))
 
        (fact "The get-user-config-by-username function returns the matching user config."
              (user-config-business/get-user-config-by-username "senderUsername") => user-config-for-tests
