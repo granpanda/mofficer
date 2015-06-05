@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 (2015-06-05)
+
+* Bug fix: create user configs table if not exists.
+* Bug fix: correct build and start scripts.
+
 ## 0.1.1 (2015-06-05)
 
 * Add scripts folder to ease build and deployment processes.
