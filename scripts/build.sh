@@ -1,1 +1,2 @@
+cd ..
 lein uberjar
