@@ -28,8 +28,8 @@ Simple!
 
 Create a UserConfig (the sender information).
 
-HTTP Method: POST
-URL: http://localhost:9022/mofficer/api/user-configs
+HTTP Method: POST <br>
+URL: http://localhost:9022/mofficer/api/user-configs <br>
 Payload: 
 
     {
@@ -43,8 +43,8 @@ Payload:
 
 Send an email (the email information).
 
-HTTP Method: POST
-URL: http://localhost:9022/mofficer/api/emails/senderId
+HTTP Method: POST <br>
+URL: http://localhost:9022/mofficer/api/emails/senderId <br>
 Payload: 
 
     {
