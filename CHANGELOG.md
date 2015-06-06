@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (2015-06-06)
+
+* Improve documentation by adding: a system description, philosophy, how to use and API docs.
+
 ## 0.2.0 (2015-06-05)
 
 * Get UserConfig by senderId instead of senderUsername.
