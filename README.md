@@ -26,7 +26,7 @@ Simple!
 
 ### How to send an Email?
 
-Create a UserConfig (the sender information).
+#### 1. Create a UserConfig (the sender information).
 
 HTTP Method: POST <br>
 URL: http://localhost:9022/mofficer/api/user-configs <br>
@@ -41,7 +41,7 @@ Payload:
         "senderId": "senderId"
     }
 
-Send an email (the email information).
+#### 2. Send an email (the email information).
 
 HTTP Method: POST <br>
 URL: http://localhost:9022/mofficer/api/emails/senderId <br>
