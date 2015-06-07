@@ -1,8 +1,6 @@
-# Mofficer
+# Mofficer [![Build Status](https://travis-ci.org/granpanda/mofficer.svg?branch=master)](https://travis-ci.org/granpanda/mofficer)
 
 Mofficer (for Mail Officer) is a lightweight and small system responsible for one thing and one thing only: send emails. It offers an API that allows other systems to send emails programmatically. We use Mofficer at BlackSip to notify different kind of events.
-
-Current build status: [![Build Status](https://travis-ci.org/granpanda/mofficer.svg?branch=master)](https://travis-ci.org/granpanda/mofficer)
 
 ## Philosophy
 
