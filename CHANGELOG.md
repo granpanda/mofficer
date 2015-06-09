@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 (2015-06-09)
+
+* Build script improvement: test the code before build it.
+
 ## 0.3.0 (2015-06-09)
 
 * Remove senderEmail field from the EmailInfo data structure.
