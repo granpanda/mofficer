@@ -46,10 +46,11 @@ URL: http://localhost:9022/mofficer/api/emails/senderId <br>
 Payload: 
 
     {
-        "senderEmail": "username@gmail.com",
         "recipients": ["qwe@gmail.com", "asd@hotmail.com", "zxc@fb.com"],
         "subject": "Welcome",
         "body": "Welcome to mofficer!"
     }
+
+The sender email will be taken from the UserConfig with the same sellerId given as path param.
 
 For further API documentation please follow this [link](https://github.com/granpanda/mofficer/wiki#api). 

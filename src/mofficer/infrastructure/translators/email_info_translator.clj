@@ -3,7 +3,6 @@
   (:import [mofficer.domain.entities.email_info EmailInfo]))
 
 (defn get-email-info-from-map [clojure-map]
-  (EmailInfo. (:senderEmail clojure-map)
-              (:recipients clojure-map)
+  (EmailInfo. (:recipients clojure-map)
               (:subject clojure-map)
               (:body clojure-map)))

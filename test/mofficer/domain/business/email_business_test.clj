@@ -13,8 +13,7 @@
                             :senderEmail "sender@domain.com"
                             :senderId "senderId"})
 
-(def email-info-for-tests {:senderEmail "sender@domain.com"
-                           :recipients "one@domain.com"
+(def email-info-for-tests {:recipients "one@domain.com"
                            :subject "subject"
                            :body "Halo!"})
 
@@ -34,4 +33,4 @@
              (email-business/get-mail-connection user-config-for-tests) => mail-connection-for-tests)
        
        (fact "The get-mail-message function returns the mail message required by postal given an email-info"
-             (email-business/get-mail-message email-info-for-tests) => mail-message-for-tests))
+             (email-business/get-mail-message user-config-for-tests email-info-for-tests) => mail-message-for-tests))

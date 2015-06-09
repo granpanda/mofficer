@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 (2015-06-09)
+
+* Remove senderEmail field from the EmailInfo data structure.
+
 ## 0.2.1 (2015-06-06)
 
 * Improve documentation by adding: a system description, philosophy, how to use and API docs.
