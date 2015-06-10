@@ -13,7 +13,7 @@ In order to send an email, the least amount of information you need is: the send
 
 ## How to use?
 
-If you don't have Leiningen installed please install it (1 minute): http://leiningen.org/#install. And then type these 4 steps in your terminal.
+If you don't have Leiningen installed please [install it](http://leiningen.org/#install). And then type these 4 steps in your terminal.
 
 Simple!
 
