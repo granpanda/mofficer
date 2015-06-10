@@ -11,7 +11,7 @@ We created Mofficer driven by two basic ideas:
 
 In order to send an email, the least amount of information you need is: the sender information and the email information. That's the only data you need to tell Mofficer and that can be done via API.
 
-## How to use
+## How to use?
 
 If you don't have Leiningen installed please install it (1 minute): http://leiningen.org/#install. And then type these 4 steps in your terminal.
 
