@@ -1,6 +1,7 @@
 (ns mofficer.domain.business.email-business
   (:require [cheshire.core :as ches]
             [postal.core :as postal]
+            [taoensso.timbre :as timbre]
             [mofficer.domain.business.user-config-business :as user-config-business]
             [mofficer.infrastructure.datastructures.either])
   (:import [mofficer.infrastructure.datastructures.either Either]))
@@ -20,7 +21,8 @@
   (let [mail-connection (get-mail-connection user-config)
         mail-message (get-mail-message user-config email-info)]
     (try (Either. nil (postal/send-message mail-connection mail-message))
-         (catch Exception e (Either. "There was a network problem, please try again later." nil)))))
+         (catch Exception e (do (timbre/error (.getMessage e))
+                              (Either. "There was a network problem, please try again later." nil))))))
 
 (defn send-email [sender-id email-info] 
   (println "Sending email to: " (:recipients email-info) " with subject: " (:subject email-info) " and message: " (:body email-info))
