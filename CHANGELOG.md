@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3 (2015-10-08)
+
+* Improve exception logging.
+
 ## 0.3.2 (2015-06-10)
 
 * Bug fix: set file encondig to utf-8 in the start.sh script.
